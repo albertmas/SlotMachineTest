@@ -5,22 +5,8 @@ using UnityEngine.UI;
 
 public class SlotMachine : MonoBehaviour
 {
-    public Image top;
-    public Image mid;
-    public Image bot;
-
-    public Sprite[] textures;
-
-    //int currentNum = 0;
-    //float spinSpeed = 0.3f;
-    //float timer = 0f;
-
-    void Start()
-    {
-        top.sprite = textures[0];
-        mid.sprite = textures[1];
-        bot.sprite = textures[2];
-    }
+    public Spin[] rollers;
+    public Button spinButton;
 
     void Update()
     {
@@ -36,5 +22,23 @@ public class SlotMachine : MonoBehaviour
         //    mid.sprite = textures[currentNum];
         //    bot.sprite = textures[currentNum + 1 < textures.Length ? currentNum + 1 : 0];
         //}
+    }
+
+    public void SpinWheels()
+    {
+        float spinTime = Random.Range(2.0f, 4.0f);
+
+        for (int i = 0; i < rollers.Length; i++)
+        {
+            rollers[i].StartSpin(spinTime, 0.2f * i);
+        }
+
+        spinButton.interactable = false;
+        Invoke("MachineReady", spinTime + 1.5f);
+    }
+
+    void MachineReady()
+    {
+        spinButton.interactable = true;
     }
 }

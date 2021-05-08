@@ -13,6 +13,7 @@ public class Spin : MonoBehaviour
 
     float wheelVelocity = 0f;
     float wheelLength; // Length from the top of the first figure to the bottom of the last
+    float spinTimer = 0f;
     readonly int offset = 10;
     List<RectTransform> figuresRectTrans;
 
@@ -40,6 +41,10 @@ public class Spin : MonoBehaviour
 
     void Update()
     {
+        // Stop spinning when the time is up
+        if (spinning && spinTimer < 0.0f)
+            StopSpin();
+
         SpinFigures();
     }
 
@@ -48,6 +53,7 @@ public class Spin : MonoBehaviour
         if (spinning)
         {
             wheelVelocity += spinAcceleration;
+            spinTimer -= Time.deltaTime;
         }
         else if (wheelVelocity > 0f)
         {
@@ -88,5 +94,30 @@ public class Spin : MonoBehaviour
             figureTrans.localPosition = new Vector3(0f, -(i * figureTrans.rect.size.y + i * offset), 0f);
             figuresRectTrans.Add(figureTrans);
         }
+    }
+
+    public void StartSpin(float duration, float warmUpTime = 0.0f)
+    {
+        spinTimer = duration;
+
+        if (warmUpTime > 0f)
+        {
+            Invoke("StartSpin", warmUpTime);
+        }
+        else
+        {
+            spinning = true;
+        }
+    }
+
+    public void StartSpin()
+    {
+        spinning = true;
+    }
+
+    void StopSpin()
+    {
+        spinning = false;
+        spinTimer = 0f;
     }
 }
