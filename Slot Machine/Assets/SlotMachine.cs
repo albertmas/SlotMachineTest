@@ -3,42 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class that controls the Slot Machine behaviour.
+/// </summary>
 public class SlotMachine : MonoBehaviour
 {
+    [Tooltip("Time between the activation of each roller.")]
+    public float rollersOffsetTime = 0.2f;
+    [Tooltip("Rollers to spin.")]
     public Spin[] rollers;
+    [Tooltip("Button to activate the rollers.")]
     public Button spinButton;
+
+    bool machineReady = true;
 
     void Update()
     {
-        //timer += Time.deltaTime;
-        //if (timer >= spinSpeed)
-        //{
-        //    timer = 0f;
-        //    currentNum++;
-        //    if (currentNum >= textures.Length)
-        //        currentNum = 0;
-
-        //    top.sprite = textures[currentNum - 1 >= 0 ? currentNum - 1 : textures.Length - 1];
-        //    mid.sprite = textures[currentNum];
-        //    bot.sprite = textures[currentNum + 1 < textures.Length ? currentNum + 1 : 0];
-        //}
+        // Spin rollers when pressing SPIN or space
+        if (machineReady && Input.GetKeyDown(KeyCode.Space))
+            SpinRollers();
     }
 
-    public void SpinWheels()
+    /// <summary>
+    /// Spin each roller from left to right
+    /// </summary>
+    public void SpinRollers()
     {
+        // Get a random spin time between two and four seconds
         float spinTime = Random.Range(2.0f, 4.0f);
 
+        // Start spinning each roller, from left to right with a offset time between them
         for (int i = 0; i < rollers.Length; i++)
         {
-            rollers[i].StartSpin(spinTime, 0.2f * i);
+            rollers[i].ActivateRoller(spinTime, rollersOffsetTime * i);
         }
 
+        // Disable spinning until current spin is over
+        machineReady = false;
         spinButton.interactable = false;
-        Invoke("MachineReady", spinTime + 1.5f);
+        Invoke(nameof(MachineReady), spinTime + 1.5f);
     }
 
+    /// <summary>
+    /// Allow the player to spin again the slot machine
+    /// </summary>
     void MachineReady()
     {
+        machineReady = true;
         spinButton.interactable = true;
     }
 }

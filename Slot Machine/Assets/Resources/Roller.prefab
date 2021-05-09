@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819fbe9c4c65db046b828794c1d52178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinning: 0
   spinVelocity: 2000
-  spinAcceleration: 50
-  spinDeceleration: 20
+  spinAcceleration: 70
+  spinDeceleration: 40
+  bounceVelocity: 600
   rollerFigures: 
